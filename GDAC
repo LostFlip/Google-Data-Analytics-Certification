@@ -1,10 +1,10 @@
 setwd("C:/Users/ADMIN/Documents/Google")
-
+```
 library(tidyverse)
 library(ggplot2)
 library(lubridate)
 library(dplyr)
-
+```
 Feb2022 <- read.csv("202202-divvy-tripdata.csv")
 Mar2022 <- read.csv("202203-divvy-tripdata.csv")
 Apr2022 <- read.csv("202204-divvy-tripdata.csv")
