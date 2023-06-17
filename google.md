@@ -1,4 +1,9 @@
+
+
+```
 setwd("C:/Users/ADMIN/Documents/Google")
+```
+
 ```
 library(tidyverse)
 library(ggplot2)
@@ -6,6 +11,7 @@ library(lubridate)
 library(dplyr)
 ```
 
+```
 Feb2022 <- read.csv("202202-divvy-tripdata.csv")
 Mar2022 <- read.csv("202203-divvy-tripdata.csv")
 Apr2022 <- read.csv("202204-divvy-tripdata.csv")
@@ -18,52 +24,73 @@ Oct2022 <- read.csv("202210-divvy-tripdata.csv")
 Nov2022 <- read.csv("202211-divvy-tripdata.csv")
 Dec2022 <- read.csv("202212-divvy-tripdata.csv")
 Jan2023 <- read.csv("202301-divvy-tripdata.csv")
+```
 
+```
 trip_data <- bind_rows(Feb2022, Mar2022, Apr2022, May2022, Jun2022, Jul2022, Aug2022, Sep2022, Oct2022, Nov2022, Dec2022, Jan2023)
 rm(Feb2022, Mar2022, Apr2022, May2022, Jun2022, Jul2022, Aug2022, Sep2022, Oct2022, Nov2022, Dec2022, Jan2023)
+```
 
+```
 trip_data$month <- format(as.Date(trip_data$date),"%B")
 trip_data$day <- format(as.Date(trip_data$date),"%d")  
 trip_data$year <- format(as.Date(trip_data$date),"%Y") 
 trip_data$day_of_week <- weekdays(trip_data$date) 
+```
 
-
+```
 trip_data_test$start_station_name[trip_data_test$start_station_name==""] <- NA
 trip_data_test$start_station_id[trip_data_test$start_station_id==""] <- NA
 trip_data_test$end_station_name[trip_data_test$end_station_name==""] <- NA
 trip_data_test$end_station_id[trip_data_test$end_station_id==""] <- NA
 drop_na(trip_data_test)
+```
 
+```
 trip_data_station <- trip_data[, c(5, 9, 10)]
 NROW(unique(trip_data_station))
+```
 
+```
 trip_data$ride_time <- difftime(trip_data$ended_at, trip_data$started_at, units = "mins")
 trip_data$ride_time <- round(trip_data$ride_time, 2)
+```
 
+```
 trip_data$ride_time <- as.numeric(as.character(trip_data$ride_time))
 trip_data <- filter(trip_data, ride_time > 0)
+```
 
+```
 trip_data %>%
   +     group_by(member_casual) %>%
   +     summarise(avg_ride_length = mean(ride_time), median_ride_length = median(ride_time), max_ride_length = max(ride_time), min_ride_length = min(ride_time)) %>%
   +     print(n=4)
+```
 
+```
 
 trip_data$weekday <- ordered(trip_data$weekday, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
 trip_data$month <- ordered(trip_data$month, levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
                                                        "December"))
+```
 
+```
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = mean)
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = median)
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = max)
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = min)
 aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN=mean)
+```
 
+```
 trip_by_day <- trip_data %>%
   group_by(member_casual, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
   arrange(member_casual, weekday)
+```
 
+```
 trip_data %>% 
   group_by(member_casual, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -73,17 +100,23 @@ trip_data %>%
   labs(title="Total number of Rides (by Weekday)", x="Week Day", y="Number of Rides") + #TOTAL RIDES WEEKDAY
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("green", "#FF00FF"))
+```
 
+```
 total_rides_casual_weekend <- NROW(filter(trip_data, member_casual == "casual" & (weekday == "Saturday" | weekday == "Sunday")))
 total_rides_casual_weekday <- NROW(filter(trip_data, member_casual == "casual" & !(weekday == "Saturday" | weekday == "Sunday")))
+```
 
+```
 week <- c("Weekday", "Weekend")
 casual_week <- c(total_rides_casual_weekday, total_rides_casual_weekend)
 piepercent <- round(100 * casual_week / sum(casual_week), 2)
 weekride <- paste(week, piepercent)
 weekride_casual <- paste(weekride, "%", sep="")
 weekride_casual
+```
 
+```
 trip_data %>% 
   group_by(member_casual, month) %>%
   summarise(num_of_rides = n()) %>%
@@ -94,7 +127,9 @@ trip_data %>%
   By Month", x="Month", y="Number of Rides") + #TOTAL RIDES MONTH
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("green", "#FF00FF"))
+```
 
+```
 trip_data %>%
   group_by(rideable_type, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -105,7 +140,9 @@ trip_data %>%
   By Weekday", x="Week Day", y="Number of Rides") + #TOTAL RIDES PER BIKE PER WEEK
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data %>%
   group_by(rideable_type, month) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -116,11 +153,14 @@ trip_data %>%
   By Month", x="Month", y="Number of Rides") + #TOTAL RIDES PER BIKE PER MONTH
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data_member <- filter(trip_data, member_casual == "member")
 trip_data_casual <- filter(trip_data, member_casual == "casual")
+```
 
-
+```
 trip_data_member %>%
   group_by(rideable_type, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -131,7 +171,9 @@ trip_data_member %>%
   By Weekday", x="Week Day", y="Number of Rides") + #TOTAL RIDES PER BIKE PER WEEK
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data_member %>%
   group_by(rideable_type, month) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -142,7 +184,9 @@ trip_data_member %>%
   By Month", x="Month", y="Number of Rides") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data_casual %>%
   group_by(rideable_type, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -153,7 +197,9 @@ trip_data_casual %>%
   By Weekday", x="Week Day", y="Number of Rides") + #TOTAL RIDES PER BIKE PER WEEK
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data_casual %>%
   group_by(rideable_type, month) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -164,7 +210,9 @@ trip_data_casual %>%
   By Month", x="Month", y="Number of Rides") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
+```
 
+```
 trip_data_member <- trip_data_member %>%
   mutate(route = paste(start_station_name, "to", sep= " "))
 trip_data_member <- trip_data_member %>%
@@ -174,19 +222,10 @@ trip_data_casual <- trip_data_member %>%
   mutate(route = paste(start_station_name, "to", sep= " "))
 trip_data_casual <- trip_data_member %>%
   mutate(route = paste(route, end_station_name, sep= " "))
+```
 
-##ORIGINAL##
-trip_route_casual <- trip_data_casual %>%
-  group_by(route) %>%
-  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
-  arrange(route, num_of_rides, avg_duration_mins)
+```
 
-top10_route_casual <- head(arrange(trip_route_casual, desc(num_of_rides)), 10)
-head(popular_casual_ride_route_top10, 10)
-
-trip_route_casual %>%
-## ORIGINAL ##
-  
 casual_start_station <- trip_data_casual %>%
   group_by(start_station_name) %>%
   summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
@@ -206,7 +245,9 @@ member_end_station <- trip_data_member %>%
   group_by(end_station_name) %>%
   summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
   arrange( desc(num_of_rides), avg_duration_mins)
-  
+```
+
+```
 
 
 5748349
