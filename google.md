@@ -1,3 +1,11 @@
+# Intro
+We are a junior data analyst for Cyclistic, a company providing bike-sharing services in Chicago. Riders may opt to purchase single-ride or full-day passes for casual use or sign up for the annual Cyclistic membership. Lily Moreno, the director of marketing, believes that maximizing the number of annual memberships is the way to go in ensuring the company's growth. In order to effectively create marketing strategies supported by this claim, we need to examine more closely the difference of a casual and member rider and analyze how they utilize the service provided to them. Given the usage data of all the trips done within the last year, along with the help of our chosen spreadsheet/data visualization software, we have everything we need to probe and extract insight that are useful and valuable to the company.
+
+The following study will be split into chapters following the steps in the data analysis process: ask, prepare, process, analyze, share and act. 
+
+# Chapter 1: Ask
+W
+
 
 
 ```
@@ -10,6 +18,7 @@ library(ggplot2)
 library(lubridate)
 library(dplyr)
 ```
+
 
 ```
 Feb2022 <- read.csv("202202-divvy-tripdata.csv")
@@ -32,7 +41,8 @@ rm(Feb2022, Mar2022, Apr2022, May2022, Jun2022, Jul2022, Aug2022, Sep2022, Oct20
 ```
 
 ```
-trip_data$month <- format(as.Date(trip_data$date),"%B")
+trip_data$month <- format(as.Date(trip_data$date),"%B")![Type Per Month](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/7fed079a-5c23-4656-ba13-076781e97a31)
+
 trip_data$day <- format(as.Date(trip_data$date),"%d")  
 trip_data$year <- format(as.Date(trip_data$date),"%Y") 
 trip_data$day_of_week <- weekdays(trip_data$date) 
