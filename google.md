@@ -4,21 +4,79 @@ We are a junior data analyst for Cyclistic, a company providing bike-sharing ser
 The following study will be split into chapters following the steps in the data analysis process: ask, prepare, process, analyze, share and act. 
 
 # Chapter 1: Ask
-W
+In this case study, we are trying to establish what differentiates a casual rider to a annual member, identifying the quantifiable metrics or data that is generated through each transaction they have with Cyclistic. By identifying these, we can formulate a marketing strategy driven by facts and data given our better understanding to the needs of each type of riders. We will also challenge or provide an input whether if annual membership is the best way to secure company growth.
 
+# Chapter 2: Prepare
+The data is stored internally within the company’s boundaries but is shared publicly through file hosting platforms and/or online storage websites. The data is generated monthly and also follows this trend when considering how the data is organized. The database contains information regarding the transactions users have done with the company services such as what kind of bike, start and end locations, longitudinal and latitudinal data etc. It may also be observed that not all of the data inputted has complete information so it is wise to perform inspection and data cleaning before proceeding with the analysis of the data.
 
+Data is obtained through the various transaction mediums of Cyclistic, which means we are reading through data that is reliable and also relevant to our purpose. For the same reason, we may also say that the data is original since we are obtaining the data firsthand through the official public sources. Reviewing the questions that need to be answered in this presentation, it is comprehensive enough to be able to draw out valuable insights that may translate into profit. Since starting this analysis on February 2023, the company has been actively updating their records for the analysts to sift through the latest data. Lastly, we are able to cite Motivate International Inc. as the primary data provider for this analysis.
 
+The dataset comes with a license in which the providers allow its users to use and perform analysis on the database given that the users will not breach any of the indicated clauses in the license. Since the data contains millions of rows across the 12-month scope of the data, a spreadsheet program would have a difficult time processing and verifying whether the data has any null or error values. Once cleaned, we are left with raw data with relevant information waiting for the analysts to discover and answer the business questions that bring value to the stakeholders.
+
+# Chapter 3: Process
+Before proceeding with any kind of insight gathering, the dataset must first be checked and cleaned for any irrelevant or dummy entries. Our software of choice to perform this will be RStudio, since we can also use its data visualization features later on in the project. Lets start the data cleaning process by opening a New Project in RStudio and writing the code.
+
+To start with, we will set the working directory of the project in our computer. This will allow us to load straight into the project whenever we open RStudio, as well as identifying the working locations of the data visualization we will create later on.
 ```
 setwd("C:/Users/ADMIN/Documents/Google")
 ```
 
 ```
+#description
+install.packages("tidyverse")
+
 library(tidyverse)
 library(ggplot2)
 library(lubridate)
 library(dplyr)
-```
 
+```
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> install.packages("tidyverse")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.2/tidyverse_2.0.0.zip'
+Content type 'application/zip' length 430921 bytes (420 KB)
+downloaded 420 KB
+
+package ‘tidyverse’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\ADMIN\AppData\Local\Temp\Rtmp2Hjktf\downloaded_packages
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors
+Warning messages:
+1: package ‘tidyverse’ was built under R version 4.2.3 
+2: package ‘ggplot2’ was built under R version 4.2.3 
+3: package ‘tibble’ was built under R version 4.2.3 
+4: package ‘readr’ was built under R version 4.2.3 
+5: package ‘dplyr’ was built under R version 4.2.3 
+6: package ‘lubridate’ was built under R version 4.2.3 
 
 ```
 Feb2022 <- read.csv("202202-divvy-tripdata.csv")
