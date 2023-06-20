@@ -20,33 +20,15 @@ To start with, we will set the working directory of the project in our computer.
 ```
 setwd("C:/Users/ADMIN/Documents/Google")
 ```
-
+We will now install the tidyverse package which will supply us the tools we need to properly clean, format and visualize the data. Since we are using a newer version of RStudio, tidyverse already comes with the other packages we need. We use the library function to load the packages we need.
 ```
-#description
 install.packages("tidyverse")
-
 library(tidyverse)
 library(ggplot2)
 library(lubridate)
 library(dplyr)
-
 ```
-R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
+```
 > install.packages("tidyverse")
 WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
 
@@ -76,8 +58,12 @@ Warning messages:
 3: package ‘tibble’ was built under R version 4.2.3 
 4: package ‘readr’ was built under R version 4.2.3 
 5: package ‘dplyr’ was built under R version 4.2.3 
-6: package ‘lubridate’ was built under R version 4.2.3 
-
+6: package ‘lubridate’ was built under R version 4.2.3
+>library(ggplot2)
+>library(lubridate)
+>library(dplyr)
+```
+Before proceeding to the next step, the downloaded data set should already be stored in the same location as the working directory. read.csv will import the .csv files as a data frame we can work on in Rstudio.
 ```
 Feb2022 <- read.csv("202202-divvy-tripdata.csv")
 Mar2022 <- read.csv("202203-divvy-tripdata.csv")
@@ -92,10 +78,117 @@ Nov2022 <- read.csv("202211-divvy-tripdata.csv")
 Dec2022 <- read.csv("202212-divvy-tripdata.csv")
 Jan2023 <- read.csv("202301-divvy-tripdata.csv")
 ```
-
+Next up, we combine the data frame representing each month into one data frame to make data cleaning manageable. The other data frames will be removed to conserve computer storage space by the rm function. We can review the data frame by clicking on the Environment panel or by the View function.
 ```
 trip_data <- bind_rows(Feb2022, Mar2022, Apr2022, May2022, Jun2022, Jul2022, Aug2022, Sep2022, Oct2022, Nov2022, Dec2022, Jan2023)
 rm(Feb2022, Mar2022, Apr2022, May2022, Jun2022, Jul2022, Aug2022, Sep2022, Oct2022, Nov2022, Dec2022, Jan2023)
+View(trip_data)
+```
+The following functions can be run in order to initially inspect the data frame we made. 
+```
+str(trip_data)
+```
+```
+'data.frame':	5754248 obs. of  13 variables:
+ $ ride_id           : chr  "E1E065E7ED285C02" "1602DCDC5B30FFE3" "BE7DD2AF4B55C4AF" "A1789BDF844412BE" ...
+ $ rideable_type     : chr  "classic_bike" "classic_bike" "classic_bike" "classic_bike" ...
+ $ started_at        : chr  "2022-02-19 18:08:41" "2022-02-20 17:41:30" "2022-02-25 18:55:56" "2022-02-14 11:57:03" ...
+ $ ended_at          : chr  "2022-02-19 18:23:56" "2022-02-20 17:45:56" "2022-02-25 19:09:34" "2022-02-14 12:04:00" ...
+ $ start_station_name: chr  "State St & Randolph St" "Halsted St & Wrightwood Ave" "State St & Randolph St" "Southport Ave & Waveland Ave" ...
+ $ start_station_id  : chr  "TA1305000029" "TA1309000061" "TA1305000029" "13235" ...
+ $ end_station_name  : chr  "Clark St & Lincoln Ave" "Southport Ave & Wrightwood Ave" "Canal St & Adams St" "Broadway & Sheridan Rd" ...
+ $ end_station_id    : chr  "13179" "TA1307000113" "13011" "13323" ...
+ $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+ $ start_lng         : num  -87.6 -87.6 -87.6 -87.7 -87.6 ...
+ $ end_lat           : num  41.9 41.9 41.9 42 41.9 ...
+ $ end_lng           : num  -87.6 -87.7 -87.6 -87.6 -87.6 ...
+ $ member_casual     : chr  "member" "member" "member" "member" ...
+```
+```
+glimpse(trip_data)
+```
+```
+Rows: 5,754,248
+Columns: 13
+$ ride_id            <chr> "E1E065E7ED285C02", "1602DCDC5B30FFE3", "BE…
+$ rideable_type      <chr> "classic_bike", "classic_bike", "classic_bi…
+$ started_at         <chr> "2022-02-19 18:08:41", "2022-02-20 17:41:30…
+$ ended_at           <chr> "2022-02-19 18:23:56", "2022-02-20 17:45:56…
+$ start_station_name <chr> "State St & Randolph St", "Halsted St & Wri…
+$ start_station_id   <chr> "TA1305000029", "TA1309000061", "TA13050000…
+$ end_station_name   <chr> "Clark St & Lincoln Ave", "Southport Ave & …
+$ end_station_id     <chr> "13179", "TA1307000113", "13011", "13323", …
+$ start_lat          <dbl> 41.88462, 41.92914, 41.88462, 41.94815, 41.…
+$ start_lng          <dbl> -87.62783, -87.64908, -87.62783, -87.66394,…
+$ end_lat            <dbl> 41.91569, 41.92877, 41.87926, 41.95283, 41.…
+$ end_lng            <dbl> -87.63460, -87.66391, -87.63990, -87.64999,…
+$ member_casual      <chr> "member", "member", "member", "member", "me…
+```
+```
+head(trip_data)
+```
+```
+           ride_id rideable_type          started_at
+1 E1E065E7ED285C02  classic_bike 2022-02-19 18:08:41
+2 1602DCDC5B30FFE3  classic_bike 2022-02-20 17:41:30
+3 BE7DD2AF4B55C4AF  classic_bike 2022-02-25 18:55:56
+4 A1789BDF844412BE  classic_bike 2022-02-14 11:57:03
+5 07DE78092C62F7B3  classic_bike 2022-02-16 05:36:06
+6 9A2F204F04AB7E24  classic_bike 2022-02-07 09:51:57
+             ended_at           start_station_name start_station_id
+1 2022-02-19 18:23:56       State St & Randolph St     TA1305000029
+2 2022-02-20 17:45:56  Halsted St & Wrightwood Ave     TA1309000061
+3 2022-02-25 19:09:34       State St & Randolph St     TA1305000029
+4 2022-02-14 12:04:00 Southport Ave & Waveland Ave            13235
+5 2022-02-16 05:39:00       State St & Randolph St     TA1305000029
+6 2022-02-07 10:07:53       St. Clair St & Erie St            13016
+                end_station_name end_station_id start_lat start_lng
+1         Clark St & Lincoln Ave          13179  41.88462 -87.62783
+2 Southport Ave & Wrightwood Ave   TA1307000113  41.92914 -87.64908
+3            Canal St & Adams St          13011  41.88462 -87.62783
+4         Broadway & Sheridan Rd          13323  41.94815 -87.66394
+5          Franklin St & Lake St   TA1307000111  41.88462 -87.62783
+6        Franklin St & Monroe St   TA1309000007  41.89435 -87.62280
+   end_lat   end_lng member_casual
+1 41.91569 -87.63460        member
+2 41.92877 -87.66391        member
+3 41.87926 -87.63990        member
+4 41.95283 -87.64999        member
+5 41.88584 -87.63550        member
+6 41.88032 -87.63519        member
+```
+```
+tail(trip_data)
+```
+```
+                 ride_id rideable_type          started_at
+5754243 A3DC3E8358DB1FAA electric_bike 2023-01-17 18:36:00
+5754244 A303816F2E8A35A8 electric_bike 2023-01-11 17:46:23
+5754245 BCDBB142CC610382  classic_bike 2023-01-30 15:08:10
+5754246 7D1C7CA80517183B  classic_bike 2023-01-06 19:34:50
+5754247 1A4EB636346DF527  classic_bike 2023-01-13 18:59:24
+5754248 069971675AC7DC62 electric_bike 2023-01-02 13:48:29
+                   ended_at       start_station_name start_station_id
+5754243 2023-01-17 19:00:26        Clark St & Elm St     TA1307000039
+5754244 2023-01-11 17:57:31        Clark St & Elm St     TA1307000039
+5754245 2023-01-30 15:33:26 Western Ave & Leland Ave     TA1307000140
+5754246 2023-01-06 19:50:01        Clark St & Elm St     TA1307000039
+5754247 2023-01-13 19:14:44        Clark St & Elm St     TA1307000039
+5754248 2023-01-02 13:59:29        Clark St & Elm St     TA1307000039
+                    end_station_name end_station_id start_lat start_lng
+5754243 Southport Ave & Clybourn Ave   TA1309000030  41.90276 -87.63149
+5754244 Southport Ave & Clybourn Ave   TA1309000030  41.90263 -87.63159
+5754245   Clarendon Ave & Gordon Ter          13379  41.96640 -87.68870
+5754246 Southport Ave & Clybourn Ave   TA1309000030  41.90297 -87.63128
+5754247 Southport Ave & Clybourn Ave   TA1309000030  41.90297 -87.63128
+5754248 Southport Ave & Clybourn Ave   TA1309000030  41.90282 -87.63169
+         end_lat   end_lng member_casual
+5754243 41.92077 -87.66371        casual
+5754244 41.92077 -87.66371        casual
+5754245 41.95787 -87.64951        member
+5754246 41.92077 -87.66371        casual
+5754247 41.92077 -87.66371        casual
+5754248 41.92077 -87.66371        casual
 ```
 
 ```
