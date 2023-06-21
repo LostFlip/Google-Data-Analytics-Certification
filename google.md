@@ -190,26 +190,20 @@ tail(trip_data)
 5754247 41.92077 -87.66371        casual
 5754248 41.92077 -87.66371        casual
 ```
-
+Since we were able to take a quick peek at our data frame, we can see that the data types of our columns pertaining to start and end dates are set as the "chr" type. The as.Date function will allow us to convert this to date for us to be able to extract each part of the date format. Let's use the name of our data frame followed by an $ operator, then the name of our new column to be occupied by each of the data format we need.
 ```
-trip_data$month <- format(as.Date(trip_data$date),"%B")![Type Per Month](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/7fed079a-5c23-4656-ba13-076781e97a31)
-
-trip_data$day <- format(as.Date(trip_data$date),"%d")  
-trip_data$year <- format(as.Date(trip_data$date),"%Y") 
-trip_data$day_of_week <- weekdays(trip_data$date) 
+trip_data$month <- format(as.Date(trip_data$started_at),"%B")
+trip_data$day <- format(as.Date(trip_data$started_at),"%d")  
+trip_data$year <- format(as.Date(trip_data$started_at),"%Y") 
+trip_data$day_of_week <- weekdays(as.Date(trip_data$started_at))
 ```
-
+To ensure that we are dealing with a data frame with complete entries, we will use the drop_na function in order to remove these rows. But first we need to assign NA to the applicable data since in RStudio, empty is NOT equal to null or NA data.
 ```
 trip_data_test$start_station_name[trip_data_test$start_station_name==""] <- NA
 trip_data_test$start_station_id[trip_data_test$start_station_id==""] <- NA
 trip_data_test$end_station_name[trip_data_test$end_station_name==""] <- NA
 trip_data_test$end_station_id[trip_data_test$end_station_id==""] <- NA
 drop_na(trip_data_test)
-```
-
-```
-trip_data_station <- trip_data[, c(5, 9, 10)]
-NROW(unique(trip_data_station))
 ```
 
 ```
