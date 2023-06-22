@@ -195,7 +195,7 @@ Since we were able to take a quick peek at our data frame, we can see that the d
 trip_data$month <- format(as.Date(trip_data$started_at),"%B")
 trip_data$day <- format(as.Date(trip_data$started_at),"%d")  
 trip_data$year <- format(as.Date(trip_data$started_at),"%Y") 
-trip_data$day_of_week <- weekdays(as.Date(trip_data$started_at))
+trip_data$weekday <- weekdays(as.Date(trip_data$started_at))
 ```
 To ensure that we are dealing with a data frame with complete entries, we will use the drop_na function in order to remove these rows. But first we need to assign NA to the applicable data since in RStudio, empty is NOT equal to null or NA data.
 ```
@@ -205,31 +205,37 @@ trip_data_test$end_station_name[trip_data_test$end_station_name==""] <- NA
 trip_data_test$end_station_id[trip_data_test$end_station_id==""] <- NA
 drop_na(trip_data_test)
 ```
-
+Now, we will be obtaining the ride time of each entry by subtracting the start and end times. The difftime function allows us also to specify what unit of measurement we will use. Afterwards, we round the result to two decimal places.
 ```
 trip_data$ride_time <- difftime(trip_data$ended_at, trip_data$started_at, units = "mins")
 trip_data$ride_time <- round(trip_data$ride_time, 2)
 ```
-
+To perform further calculations and/or data cleaning, we convert the ride time to numeric data type (instead of date). We then filter out rides in which the ride time is less than zero.
 ```
-trip_data$ride_time <- as.numeric(as.character(trip_data$ride_time))
+trip_data$ride_time <- as.numeric(trip_data$ride_time)
 trip_data <- filter(trip_data, ride_time > 0)
 ```
-
+Our data is now clean! Let's use the summarise function and the corresponding statistical operators to get the mean, median, min and max of our ride times.
 ```
 trip_data %>%
-  +     group_by(member_casual) %>%
-  +     summarise(avg_ride_length = mean(ride_time), median_ride_length = median(ride_time), max_ride_length = max(ride_time), min_ride_length = min(ride_time)) %>%
-  +     print(n=4)
+group_by(member_casual) %>%
+summarise(avg_ride_length = mean(ride_time), median_ride_length = median(ride_time), max_ride_length = max(ride_time), min_ride_length = min(ride_time)) %>%
+print(n=4)
 ```
-
 ```
-
+# A tibble: 2 × 5
+  member_casual avg_ride_length median_ride_length max_ride_length
+  <chr>                   <dbl>              <dbl>           <dbl>
+1 casual                   29.0              12.9           41387.
+2 member                   12.6               8.77           1560.
+# ℹ 1 more variable: min_ride_length <dbl>
+```
+We use the ordered function here to ensure the data will follow this heirarchy later during data visualization and in the next step.
+```
 trip_data$weekday <- ordered(trip_data$weekday, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
-trip_data$month <- ordered(trip_data$month, levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-                                                       "December"))
+trip_data$month <- ordered(trip_data$month, levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
 ```
-
+To separate the statistical data of casual and member riders, we then use the aggregate function to obtain the ride time as sorted by the member type.
 ```
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = mean)
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = median)
@@ -238,6 +244,40 @@ aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = min)
 aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN=mean)
 ```
 
+```
+> aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = mean)
+  trip_data$member_casual trip_data$ride_time
+1                  casual            29.03219
+2                  member            12.62950
+> aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = median)
+  trip_data$member_casual trip_data$ride_time
+1                  casual               12.92
+2                  member                8.77
+> aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = max)
+  trip_data$member_casual trip_data$ride_time
+1                  casual            41387.25
+2                  member             1559.90
+> aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = min)
+  trip_data$member_casual trip_data$ride_time
+1                  casual                0.02
+2                  member                0.02
+> aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN=mean)
+   trip_data$weekday trip_data$member_casual trip_data$ride_time
+1                 Friday                  casual            27.95607
+2                 Monday                  casual            29.05488
+3               Saturday                  casual            32.50139
+4                 Sunday                  casual            34.09580
+5               Thursday                  casual            25.40979
+6                Tuesday                  casual            25.68575
+7              Wednesday                  casual            24.52966
+8                 Friday                  member            12.46029
+9                 Monday                  member            12.20151
+10              Saturday                  member            14.07203
+11                Sunday                  member            13.95328
+12              Thursday                  member            12.20819
+13               Tuesday                  member            12.01598
+14             Wednesday                  member            12.02477
+```
 ```
 trip_by_day <- trip_data %>%
   group_by(member_casual, weekday) %>%
