@@ -243,7 +243,6 @@ aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = max)
 aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = min)
 aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN=mean)
 ```
-
 ```
 > aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = mean)
   trip_data$member_casual trip_data$ride_time
@@ -278,13 +277,18 @@ aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN
 13               Tuesday                  member            12.01598
 14             Wednesday                  member            12.02477
 ```
+The next step will create a new data frame arranged firstly by the membership type, then the day of the week. Summarise is used to get the count of each occurrence as well as the average ride time that was recorded on those occurrences.
 ```
 trip_by_day <- trip_data %>%
   group_by(member_casual, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
   arrange(member_casual, weekday)
 ```
-
+```
+`summarise()` has grouped output by 'member_casual'. You can override
+using the `.groups` argument.
+```
+We are now done processing and cleaning the data and are ready to move on to data visualization. First, let's see how many riders use Cyclistic's ride sharing service across the days of the week by setting our x-axis to describe the weekday, and the y-axis to describe the rider count. Functions that improve the layout and add to the overall readability of the resulting plot may be added after the ggplot syntax.
 ```
 trip_data %>% 
   group_by(member_casual, weekday) %>%
@@ -296,20 +300,40 @@ trip_data %>%
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("green", "#FF00FF"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e944ec70-809c-4b64-a3c2-a0ff99ff1435)
+---
+Let's quantify what percentage of rider type use the ride sharing service during the weekends versus the weekdays.
 ```
 total_rides_casual_weekend <- NROW(filter(trip_data, member_casual == "casual" & (weekday == "Saturday" | weekday == "Sunday")))
+total_rides_member_weekend <- NROW(filter(trip_data, member_casual == "member" & (weekday == "Saturday" | weekday == "Sunday")))
 total_rides_casual_weekday <- NROW(filter(trip_data, member_casual == "casual" & !(weekday == "Saturday" | weekday == "Sunday")))
-```
+total_rides_member_weekday <- NROW(filter(trip_data, member_casual == "member" & !(weekday == "Saturday" | weekday == "Sunday")))
 
+percent_casual_weekend <-  round(100 * (total_rides_casual_weekend/ (total_rides_casual_weekend+total_rides_member_weekend)),2)
+percent_member_weekend <-  round(100 * (total_rides_member_weekend/ (total_rides_casual_weekend+total_rides_member_weekend)),2)
+percent_casual_weekday <-  round(100 * (total_rides_casual_weekday/ (total_rides_casual_weekday+total_rides_member_weekday)),2)
+percent_member_weekday <-  round(100 * (total_rides_member_weekday/ (total_rides_casual_weekday+total_rides_member_weekday)),2)
+
+percent_weekday <- c(percent_casual_weekday, percent_member_weekday)
+percent_weekend <- c(percent_casual_weekend, percent_member_weekend)
+week_labeler <- c("Casual", "Member")
+
+pie_weekdays <- paste(week_labeler, percent_weekday)
+pie_weekdays <- paste(pie_weekdays, "%", sep="")
+pie(percent_weekday, label = pie_weekdays, main = "Member Type Distribution on Weekdays")
 ```
-week <- c("Weekday", "Weekend")
-casual_week <- c(total_rides_casual_weekday, total_rides_casual_weekend)
-piepercent <- round(100 * casual_week / sum(casual_week), 2)
-weekride <- paste(week, piepercent)
-weekride_casual <- paste(weekride, "%", sep="")
-weekride_casual
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/26af181b-41d5-452a-ac7d-0b0a6e79b20f)
+---
 ```
+pie_weekends <- paste(week_labeler, percent_weekend)
+pie_weekends <- paste(pie_weekends, "%", sep="")
+pie(percent_weekend, label = pie_weekends, main = "Member Type Distribution on Weekend")
+```
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b0e8bdd8-0920-499d-9c71-f85af45c6fd7)
+---
 
 ```
 trip_data %>% 
@@ -323,6 +347,9 @@ trip_data %>%
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("green", "#FF00FF"))
 ```
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e524f786-1ecf-49e7-bc4d-ec53333f018f)
+---
 
 ```
 trip_data %>%
