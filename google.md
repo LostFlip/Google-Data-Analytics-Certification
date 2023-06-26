@@ -334,7 +334,7 @@ pie(percent_weekend, label = pie_weekends, main = "Member Type Distribution on W
 ---
 ![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b0e8bdd8-0920-499d-9c71-f85af45c6fd7)
 ---
-
+Using the same syntax as the weekday plot, the following will create a plot for the monthly data of Cyclistic riders.
 ```
 trip_data %>% 
   group_by(member_casual, month) %>%
@@ -350,7 +350,7 @@ trip_data %>%
 ---
 ![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e524f786-1ecf-49e7-bc4d-ec53333f018f)
 ---
-
+The following plots weekly and monthly data for the rideable type usage.
 ```
 trip_data %>%
   group_by(rideable_type, weekday) %>%
@@ -363,7 +363,9 @@ trip_data %>%
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/54a5df76-bb87-4268-be5a-748b3cb97ebf)
+---
 ```
 trip_data %>%
   group_by(rideable_type, month) %>%
@@ -376,13 +378,17 @@ trip_data %>%
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b3138a68-93ce-4104-9990-c32c8cd68a51)
+---
+Creating a data frame for each member type. 
 ```
 trip_data_member <- filter(trip_data, member_casual == "member")
 trip_data_casual <- filter(trip_data, member_casual == "casual")
 ```
 
 ```
+#Weekly Rideable Type (Member)
 trip_data_member %>%
   group_by(rideable_type, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -390,12 +396,15 @@ trip_data_member %>%
   ggplot(aes(x = weekday, y=num_of_rides, fill=rideable_type)) +
   geom_col(position="dodge2") + 
   labs(title="Total number of Rides per type of bike (Member)
-  By Weekday", x="Week Day", y="Number of Rides") + #TOTAL RIDES PER BIKE PER WEEK
+  By Weekday", x="Week Day", y="Number of Rides") + 
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/d2c5aee4-a798-4962-a59b-fa83b4a6763a)
+---
 ```
+#Monthly Rideable Type (Member)
 trip_data_member %>%
   group_by(rideable_type, month) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -407,8 +416,11 @@ trip_data_member %>%
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/68ce1918-2279-4bb9-9087-d0302c32db90)
+---
 ```
+#Weekly Rideable Type (Casual)
 trip_data_casual %>%
   group_by(rideable_type, weekday) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -416,12 +428,15 @@ trip_data_casual %>%
   ggplot(aes(x = weekday, y=num_of_rides, fill=rideable_type)) +
   geom_col(position="dodge2") + 
   labs(title="Total number of Rides per type of bike (Member)
-  By Weekday", x="Week Day", y="Number of Rides") + #TOTAL RIDES PER BIKE PER WEEK
+  By Weekday", x="Week Day", y="Number of Rides") + 
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b2cd940e-a32c-4d8e-8606-be612b871960)
+---
 ```
+#Monthly Rideable Type (Casual)
 trip_data_casual %>%
   group_by(rideable_type, month) %>%
   summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
@@ -429,11 +444,14 @@ trip_data_casual %>%
   ggplot(aes(x = month, y=num_of_rides, fill=rideable_type)) +
   geom_col(position="dodge2") + 
   labs(title="Total number of Rides per type of bike (Casual)
-  By Month", x="Month", y="Number of Rides") +
+  By Month", x="Month", y="Number of Rides") + 
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
-
+---
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/96a3a318-9d8f-4a7d-9b5f-4ef2e85f9469)
+---
+$$$ complete the head shit
 ```
 trip_data_member <- trip_data_member %>%
   mutate(route = paste(start_station_name, "to", sep= " "))
