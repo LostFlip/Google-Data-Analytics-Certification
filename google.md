@@ -645,22 +645,7 @@ On the monthly statistics, the first quarter records the least amount of users a
 Classic bikes are still the most preferred vehicle for both member and casual riders, topping all year round comprising around 55% of the entire population. Electric bikes follow at 35% and Docked bikes comprise the last 10%. Member riders are found to not use docked bikes at all. Preference towards classic bikes may be attributed to general familiarity and simplicity in terms of operation and maintenance. The rise of electric bike technology is reflected on the resulting plot, and docked bikes come in last as they are more catered towards leisure riding.
 The extracted start and end data shows that users show that some areas may be considered hotspots where most of the users interact with Cyclistic. The most common type of rides users do are shown to be round trips likely to be in working districts, while casual riders notably visit cyclist friendly spots or tour destinations such as harbors, lakes and parks, also inflating their average time spent using the service.
 # Chapter 6: Act
-	Without a doubt, member riders are the majority of the population of Cyclistic. To ensure the company’s sustainability, the services must be maintained and/or improved to remain an attractive option to cyclists. For instance, consider the budget allocation when it comes to maintenance or newer models of classic bikes as opposed to docked bikes. Increase the pool of bikes in hotspot areas especially during the second and third quarters of the year. Collaborate with local businesses and organize community events wherein member riders can attend and win special prizes.
-	Create attractive packages on becoming a Cyclistic member. Casual riders ride 15-20 minutes longer than member riders, there is an opportunity here to charge per hour as opposed to members that come with a monthly subscription. Member exclusive benefits such as discounts from a local partner business, availability of more types of bikes (mountain/trail bikes, folding, touring etc.) can be used to encourage casuals to avail the membership. 
-	Wisely use the downtime during the first and last quarter of the year to realign and optimize where resources are spent. Perform routine checks on the bike stations to check if there are new establishments that will increase the traffic in the area and allocate accordingly. Perhaps attend conventions or trainings relevant to the bike and bike sharing industry, additionally keep in touch with local business and discuss possible collaborations. Software (apps, websites etc.) and hardware (bicycles, stations, office etc.) maintenance is ideally performed during this time as to accommodate the large number of riders during the second to third quarter.
+Without a doubt, member riders are the majority of the population of Cyclistic. To ensure the company’s sustainability, the services must be maintained and/or improved to remain an attractive option to cyclists. For instance, consider the budget allocation when it comes to maintenance or newer models of classic bikes as opposed to docked bikes. Increase the pool of bikes in hotspot areas especially during the second and third quarters of the year. Collaborate with local businesses and organize community events wherein member riders can attend and win special prizes.
+Create attractive packages on becoming a Cyclistic member. Casual riders ride 15-20 minutes longer than member riders, there is an opportunity here to charge per hour as opposed to members that come with a monthly subscription. Member exclusive benefits such as discounts from a local partner business, availability of more types of bikes (mountain/trail bikes, folding, touring etc.) can be used to encourage casuals to avail the membership. 
+Wisely use the downtime during the first and last quarter of the year to realign and optimize where resources are spent. Perform routine checks on the bike stations to check if there are new establishments that will increase the traffic in the area and allocate accordingly. Perhaps attend conventions or trainings relevant to the bike and bike sharing industry, additionally keep in touch with local business and discuss possible collaborations. Software (apps, websites etc.) and hardware (bicycles, stations, office etc.) maintenance is ideally performed during this time as to accommodate the large number of riders during the second to third quarter.
 
-5748349
-
-1.	Calculate mean of ride_length
-mean(trip_data$ride_time)
-2.	Calculate the max ride_length
-max(trip_data$ride_time)
-3.	Calculate mode of day of week
-head(trip_by_day,14)
-4.	Average ride_length for casual and members. Try rows = members, values =  average of ride length
-mean(trip_data_casual$ride_time)
-mean(trip_data_member$ride_time)
-5.	Average ride length of users by day of week. Try columns = day of week, rows = members_casual, values = average of ride length
-head(trip_by_day,14)
-6.	Calculate number of rides for users by day_of_week by adding Count of trip_id to values
-head(trip_by_day,14)
