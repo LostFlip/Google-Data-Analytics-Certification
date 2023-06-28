@@ -13,8 +13,8 @@ Data is obtained through the various transaction mediums of Cyclistic, which mea
 
 The dataset comes with a license in which the providers allow its users to use and perform analysis on the database given that the users will not breach any of the indicated clauses in the license. Since the data contains millions of rows across the 12-month scope of the data, a spreadsheet program would have a difficult time processing and verifying whether the data has any null or error values. Once cleaned, we are left with raw data with relevant information waiting for the analysts to discover and answer the business questions that bring value to the stakeholders.
 
-# Chapter 3: Process
-Before proceeding with any kind of insight gathering, the dataset must first be checked and cleaned for any irrelevant or dummy entries. Our software of choice to perform this will be RStudio, since we can also use its data visualization features later on in the project. Lets start the data cleaning process by opening a New Project in RStudio and writing the code.
+# Chapter 3 - 4: Process & Analyze
+Before proceeding with any kind of insight gathering, the dataset must first be checked and cleaned for any irrelevant or dummy entries. Our software of choice to perform this will be RStudio, since we can also use its data visualization features later on in the project. We will also be including syntax in the Analyze process in this section, since both of these steps are performed through RStudio. Lets start the data cleaning process by opening a New Project in RStudio and writing the code.
 
 To start with, we will set the working directory of the project in our computer. This will allow us to load straight into the project whenever we open RStudio, as well as identifying the working locations of the data visualization we will create later on.
 ```
@@ -400,7 +400,7 @@ trip_data_member %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/f317f1b7-8e47-418b-80ba-ce6b61129da9)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b2009f70-0136-4061-a367-afbae737b940)
 ---
 ```
 #Monthly Rideable Type (Member)
@@ -416,7 +416,7 @@ trip_data_member %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/65ed175f-4e54-4dbb-80cf-510f5cb281d7)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/491b75b1-3138-4a69-a1d5-9a909b229b04)
 ---
 ```
 #Weekly Rideable Type (Casual)
@@ -432,7 +432,7 @@ trip_data_casual %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/c5933a12-af48-40b4-acb0-4583d1d9bfee)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e7596557-12b2-410d-9ccc-3eb02b9e8f80)
 ---
 ```
 #Monthly Rideable Type (Casual)
@@ -639,8 +639,15 @@ head(member_end_station, 20)
 19 Wells St & Huron St                       14752             10.0 
 20 Sheffield Ave & Fullerton Ave             14674              9.07
 ```
-```
-
+# Chapter 5: Share
+Looking at the weekly statistics, casual and member riders almost equally use the ride sharing service during weekends. On weekends however, the population of casual riders compose only a third of Cyclistic riders. This may be attributed to the fact that member riders use ride sharing for work or school commute during, whereas only fewer casual riders need a bike on weekdays as they may use an alternative type of transportation. Member ride count decreases during the weekend to the point where casual rides outnumber the former, which supplements the aforementioned claim.
+On the monthly statistics, the first quarter records the least amount of users as compared to the other months. The rider count steadily increases starting the second quarter where typically reaches its peak, followed by a gentle decline on the succeeding third quarter. The last quarter observes an even sharper decline of users. Some factors that could contribute to the low number count in the first quarter are company or university reorganization/transitions, as well as extended vacations or holidays. Businesses, events and schools are usually on full blast by the second and third quarters and will increase the traffic of ride sharing, before arriving at the fourth quarter which holiday preparations are usually done and we see a decrease in traffic.
+Classic bikes are still the most preferred vehicle for both member and casual riders, topping all year round comprising around 55% of the entire population. Electric bikes follow at 35% and Docked bikes comprise the last 10%. Member riders are found to not use docked bikes at all. Preference towards classic bikes may be attributed to general familiarity and simplicity in terms of operation and maintenance. The rise of electric bike technology is reflected on the resulting plot, and docked bikes come in last as they are more catered towards leisure riding.
+The extracted start and end data shows that users show that some areas may be considered hotspots where most of the users interact with Cyclistic. The most common type of rides users do are shown to be round trips likely to be in working districts, while casual riders notably visit cyclist friendly spots or tour destinations such as harbors, lakes and parks, also inflating their average time spent using the service.
+# Chapter 6: Act
+	Without a doubt, member riders are the majority of the population of Cyclistic. To ensure the company’s sustainability, the services must be maintained and/or improved to remain an attractive option to cyclists. For instance, consider the budget allocation when it comes to maintenance or newer models of classic bikes as opposed to docked bikes. Increase the pool of bikes in hotspot areas especially during the second and third quarters of the year. Collaborate with local businesses and organize community events wherein member riders can attend and win special prizes.
+	Create attractive packages on becoming a Cyclistic member. Casual riders ride 15-20 minutes longer than member riders, there is an opportunity here to charge per hour as opposed to members that come with a monthly subscription. Member exclusive benefits such as discounts from a local partner business, availability of more types of bikes (mountain/trail bikes, folding, touring etc.) can be used to encourage casuals to avail the membership. 
+	Wisely use the downtime during the first and last quarter of the year to realign and optimize where resources are spent. Perform routine checks on the bike stations to check if there are new establishments that will increase the traffic in the area and allocate accordingly. Perhaps attend conventions or trainings relevant to the bike and bike sharing industry, additionally keep in touch with local business and discuss possible collaborations. Software (apps, websites etc.) and hardware (bicycles, stations, office etc.) maintenance is ideally performed during this time as to accommodate the large number of riders during the second to third quarter.
 
 5748349
 
