@@ -199,11 +199,11 @@ trip_data$weekday <- weekdays(as.Date(trip_data$started_at))
 ```
 To ensure that we are dealing with a data frame with complete entries, we will use the drop_na function in order to remove these rows. But first we need to assign NA to the applicable data since in RStudio, empty is NOT equal to null or NA data.
 ```
-trip_data_test$start_station_name[trip_data_test$start_station_name==""] <- NA
-trip_data_test$start_station_id[trip_data_test$start_station_id==""] <- NA
-trip_data_test$end_station_name[trip_data_test$end_station_name==""] <- NA
-trip_data_test$end_station_id[trip_data_test$end_station_id==""] <- NA
-drop_na(trip_data_test)
+trip_data$start_station_name[trip_data$start_station_name==""] <- NA
+trip_data$start_station_id[trip_data$start_station_id==""] <- NA
+trip_data$end_station_name[trip_data$end_station_name==""] <- NA
+trip_data$end_station_id[trip_data$end_station_id==""] <- NA
+trip_data <- drop_na(trip_data)
 ```
 Now, we will be obtaining the ride time of each entry by subtracting the start and end times. The difftime function allows us also to specify what unit of measurement we will use. Afterwards, we round the result to two decimal places.
 ```
@@ -224,11 +224,10 @@ print(n=4)
 ```
 ```
 # A tibble: 2 × 5
-  member_casual avg_ride_length median_ride_length max_ride_length
-  <chr>                   <dbl>              <dbl>           <dbl>
-1 casual                   29.0              12.9           41387.
-2 member                   12.6               8.77           1560.
-# ℹ 1 more variable: min_ride_length <dbl>
+  member_casual avg_ride_length median_ride_length max_ride_length min_ride_length
+  <chr>                   <dbl>              <dbl>           <dbl>           <dbl>
+1 casual                   23.8              13.8           34354.            0.02
+2 member                   12.4               8.92           1498.            0.02
 ```
 We use the ordered function here to ensure the data will follow this heirarchy later during data visualization and in the next step.
 ```
@@ -246,36 +245,36 @@ aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN
 ```
 > aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = mean)
   trip_data$member_casual trip_data$ride_time
-1                  casual            29.03219
-2                  member            12.62950
+1                  casual            23.81856
+2                  member            12.39863
 > aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = median)
   trip_data$member_casual trip_data$ride_time
-1                  casual               12.92
-2                  member                8.77
+1                  casual               13.77
+2                  member                8.92
 > aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = max)
   trip_data$member_casual trip_data$ride_time
-1                  casual            41387.25
-2                  member             1559.90
+1                  casual            34354.07
+2                  member             1497.87
 > aggregate(trip_data$ride_time ~ trip_data$member_casual, FUN = min)
   trip_data$member_casual trip_data$ride_time
 1                  casual                0.02
 2                  member                0.02
 > aggregate(trip_data$ride_time ~ trip_data$weekday + trip_data$member_casual, FUN=mean)
    trip_data$weekday trip_data$member_casual trip_data$ride_time
-1                 Friday                  casual            27.95607
-2                 Monday                  casual            29.05488
-3               Saturday                  casual            32.50139
-4                 Sunday                  casual            34.09580
-5               Thursday                  casual            25.40979
-6                Tuesday                  casual            25.68575
-7              Wednesday                  casual            24.52966
-8                 Friday                  member            12.46029
-9                 Monday                  member            12.20151
-10              Saturday                  member            14.07203
-11                Sunday                  member            13.95328
-12              Thursday                  member            12.20819
-13               Tuesday                  member            12.01598
-14             Wednesday                  member            12.02477
+1             Friday                  casual            22.22289
+2             Monday                  casual            24.64872
+3           Saturday                  casual            26.63283
+4             Sunday                  casual            27.12965
+5           Thursday                  casual            21.11712
+6            Tuesday                  casual            21.29264
+7          Wednesday                  casual            20.47458
+8             Friday                  member            12.18525
+9             Monday                  member            11.96802
+10          Saturday                  member            13.94720
+11            Sunday                  member            13.80151
+12          Thursday                  member            11.98478
+13           Tuesday                  member            11.72409
+14         Wednesday                  member            11.80758
 ```
 The next step will create a new data frame arranged firstly by the membership type, then the day of the week. Summarise is used to get the count of each occurrence as well as the average ride time that was recorded on those occurrences.
 ```
@@ -301,7 +300,7 @@ trip_data %>%
   scale_fill_manual(values = c("green", "#FF00FF"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e944ec70-809c-4b64-a3c2-a0ff99ff1435)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/7dc62e05-1266-4726-9d99-c488506dd589)
 ---
 Let's quantify what percentage of rider type use the ride sharing service during the weekends versus the weekdays.
 ```
@@ -324,7 +323,7 @@ pie_weekdays <- paste(pie_weekdays, "%", sep="")
 pie(percent_weekday, label = pie_weekdays, main = "Member Type Distribution on Weekdays")
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/26af181b-41d5-452a-ac7d-0b0a6e79b20f)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/a46d18e2-0648-4635-9d2f-ef82952fbab8)
 ---
 ```
 pie_weekends <- paste(week_labeler, percent_weekend)
@@ -332,7 +331,7 @@ pie_weekends <- paste(pie_weekends, "%", sep="")
 pie(percent_weekend, label = pie_weekends, main = "Member Type Distribution on Weekend")
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b0e8bdd8-0920-499d-9c71-f85af45c6fd7)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/59c2cf58-1792-43e6-9899-c7637dce607e)
 ---
 Using the same syntax as the weekday plot, the following will create a plot for the monthly data of Cyclistic riders.
 ```
@@ -348,7 +347,7 @@ trip_data %>%
   scale_fill_manual(values = c("green", "#FF00FF"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/e524f786-1ecf-49e7-bc4d-ec53333f018f)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/4964385a-bce7-4843-9e5e-ec132b2cdc8d)
 ---
 The following plots weekly and monthly data for the rideable type usage.
 ```
@@ -364,7 +363,7 @@ trip_data %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/54a5df76-bb87-4268-be5a-748b3cb97ebf)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/ae350bc2-b0b8-4ef8-af7d-1635c433138c)
 ---
 ```
 trip_data %>%
@@ -379,7 +378,7 @@ trip_data %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b3138a68-93ce-4104-9990-c32c8cd68a51)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/27db302c-3b63-45f0-b4d9-7672d120e7bf)
 ---
 Creating a data frame for each member type. 
 ```
@@ -401,7 +400,7 @@ trip_data_member %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/d2c5aee4-a798-4962-a59b-fa83b4a6763a)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/f317f1b7-8e47-418b-80ba-ce6b61129da9)
 ---
 ```
 #Monthly Rideable Type (Member)
@@ -417,7 +416,7 @@ trip_data_member %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/68ce1918-2279-4bb9-9087-d0302c32db90)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/65ed175f-4e54-4dbb-80cf-510f5cb281d7)
 ---
 ```
 #Weekly Rideable Type (Casual)
@@ -427,13 +426,13 @@ trip_data_casual %>%
   arrange(rideable_type, weekday)%>%
   ggplot(aes(x = weekday, y=num_of_rides, fill=rideable_type)) +
   geom_col(position="dodge2") + 
-  labs(title="Total number of Rides per type of bike (Member)
+  labs(title="Total number of Rides per type of bike (Casual)
   By Weekday", x="Week Day", y="Number of Rides") + 
   scale_y_continuous(labels = scales::comma) +
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/b2cd940e-a32c-4d8e-8606-be612b871960)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/c5933a12-af48-40b4-acb0-4583d1d9bfee)
 ---
 ```
 #Monthly Rideable Type (Casual)
@@ -449,42 +448,87 @@ trip_data_casual %>%
   scale_fill_manual(values = c("red", "green", "blue"))
 ```
 ---
-![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/96a3a318-9d8f-4a7d-9b5f-4ef2e85f9469)
+![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/fd3e1ec6-75e3-49c0-a505-6b9f11d293ef)
 ---
-$$$ complete the head shit
+The following syntax will describe the typical or popular routes used by each rider category
 ```
 trip_data_member <- trip_data_member %>%
   mutate(route = paste(start_station_name, "to", sep= " "))
 trip_data_member <- trip_data_member %>%
   mutate(route = paste(route, end_station_name, sep= " "))
 
-trip_data_casual <- trip_data_member %>%
-  mutate(route = paste(start_station_name, "to", sep= " "))
-trip_data_casual <- trip_data_member %>%
-  mutate(route = paste(route, end_station_name, sep= " "))
-```
+top_route_member <- trip_data_member %>%
+  group_by(route) %>%
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange(route, num_of_rides, avg_duration)
 
+top10_route_member <- head(arrange(top_route_member, desc(num_of_rides)),10)
+head(top10_route_member, 10)
+```
+```
+# A tibble: 10 × 3
+   route                                             num_of_rides avg_duration
+   <chr>                                                    <int>        <dbl>
+ 1 Ellis Ave & 60th St to University Ave & 57th St           6277         4.80
+ 2 University Ave & 57th St to Ellis Ave & 60th St           5979         4.83
+ 3 Ellis Ave & 60th St to Ellis Ave & 55th St                5574         5.19
+ 4 Ellis Ave & 55th St to Ellis Ave & 60th St                5102         5.26
+ 5 State St & 33rd St to Calumet Ave & 33rd St               3490         4.71
+ 6 Calumet Ave & 33rd St to State St & 33rd St               3409         4.14
+ 7 Loomis St & Lexington St to Morgan St & Polk St           3041         5.12
+ 8 Morgan St & Polk St to Loomis St & Lexington St           2991         5.42
+ 9 University Ave & 57th St to Kimbark Ave & 53rd St         2396         7.22
+10 Kimbark Ave & 53rd St to University Ave & 57th St         2140         6.88
+```
+```
+trip_data_casual <- trip_data_casual %>%
+  mutate(route = paste(start_station_name, "to", sep= " "))
+trip_data_casual <- trip_data_casual %>%
+  mutate(route = paste(route, end_station_name, sep= " "))
+
+top_route_casual <- trip_data_casual %>%
+  group_by(route) %>%
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange(route, num_of_rides, avg_duration)
+
+top10_route_casual <- head(arrange(top_route_casual, desc(num_of_rides)),10)
+head(top10_route_casual, 10)
+```
+```
+# A tibble: 10 × 3
+   route                                                                    num_of_rides avg_duration
+   <chr>                                                                           <int>        <dbl>
+ 1 Streeter Dr & Grand Ave to Streeter Dr & Grand Ave                              10658         40.6
+ 2 DuSable Lake Shore Dr & Monroe St to DuSable Lake Shore Dr & Monroe St           6645         34.6
+ 3 DuSable Lake Shore Dr & Monroe St to Streeter Dr & Grand Ave                     5122         27.8
+ 4 Michigan Ave & Oak St to Michigan Ave & Oak St                                   4612         45.1
+ 5 Millennium Park to Millennium Park                                               4081         37.6
+ 6 Montrose Harbor to Montrose Harbor                                               2947         49.5
+ 7 Streeter Dr & Grand Ave to DuSable Lake Shore Dr & Monroe St                     2843         28.1
+ 8 Streeter Dr & Grand Ave to Millennium Park                                       2742         33.7
+ 9 Shedd Aquarium to Shedd Aquarium                                                 2515         22.8
+10 DuSable Lake Shore Dr & North Blvd to DuSable Lake Shore Dr & North Blvd         2443         37.0
 ```
 
 casual_start_station <- trip_data_casual %>%
   group_by(start_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration_mins)
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration)
 
 casual_end_station <- trip_data_casual %>%
   group_by(end_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration_mins)
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration)
 
 member_start_station <- trip_data_member %>%
   group_by(start_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration_mins)
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration)
   
 member_end_station <- trip_data_member %>%
   group_by(end_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration_mins)
+  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration)
 ```
 
 ```
