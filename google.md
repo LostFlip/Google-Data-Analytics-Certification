@@ -450,7 +450,7 @@ trip_data_casual %>%
 ---
 ![image](https://github.com/LostFlip/Google-Data-Analytics-Certification/assets/136613906/fd3e1ec6-75e3-49c0-a505-6b9f11d293ef)
 ---
-The following syntax will describe the typical or popular routes used by each rider category
+The following syntax will describe the typical or popular routes used by each rider category.
 ```
 trip_data_member <- trip_data_member %>%
   mutate(route = paste(start_station_name, "to", sep= " "))
@@ -509,28 +509,136 @@ head(top10_route_casual, 10)
  9 Shedd Aquarium to Shedd Aquarium                                                 2515         22.8
 10 DuSable Lake Shore Dr & North Blvd to DuSable Lake Shore Dr & North Blvd         2443         37.0
 ```
-
+This last piece of syntax will also list down where each of the riders pick up their bike and where they take off.
+```
 casual_start_station <- trip_data_casual %>%
   group_by(start_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration)
+  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration_mins)
+  head(casual_start_station, 20)
 
 casual_end_station <- trip_data_casual %>%
   group_by(end_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration)
+  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration_mins)
+head(casual_end_station, 20)
 
 member_start_station <- trip_data_member %>%
   group_by(start_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration)
-  
+  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration_mins)
+head(member_start_station, 20)
+
 member_end_station <- trip_data_member %>%
   group_by(end_station_name) %>%
-  summarise(num_of_rides = n(), avg_duration = mean(ride_time)) %>%
-  arrange( desc(num_of_rides), avg_duration)
+  summarise(num_of_rides = n(), avg_duration_mins = mean(ride_time)) %>%
+  arrange( desc(num_of_rides), avg_duration_mins)
+head(member_end_station, 20)
 ```
+```
+>   head(casual_start_station, 20)
+# A tibble: 20 × 3
+   start_station_name                 num_of_rides avg_duration_mins
+   <chr>                                     <int>             <dbl>
+ 1 Streeter Dr & Grand Ave                   55224              35.9
+ 2 DuSable Lake Shore Dr & Monroe St         30373              37.3
+ 3 Millennium Park                           24090              39.7
+ 4 Michigan Ave & Oak St                     23819              36.2
+ 5 DuSable Lake Shore Dr & North Blvd        22195              29.3
+ 6 Shedd Aquarium                            19640              30.3
+ 7 Theater on the Lake                       17353              30.6
+ 8 Wells St & Concord Ln                     14951              17.7
+ 9 Dusable Harbor                            13302              36.1
+10 Indiana Ave & Roosevelt Rd                12836              32.0
+11 Clark St & Armitage Ave                   12832              22.2
+12 Clark St & Lincoln Ave                    12520              22.4
+13 Clark St & Elm St                         12092              17.8
+14 Montrose Harbor                           11694              36.4
+15 Wells St & Elm St                         11540              15.9
+16 Adler Planetarium                         11000              33.6
+17 Clark St & Newport St                     10935              17.3
+18 Wabash Ave & Grand Ave                    10878              27.0
+19 Michigan Ave & 8th St                     10795              33.1
+20 Broadway & Barry Ave                      10711              19.9
+> 
 
+> head(casual_end_station, 20)
+# A tibble: 20 × 3
+   end_station_name                   num_of_rides avg_duration_mins
+   <chr>                                     <int>             <dbl>
+ 1 Streeter Dr & Grand Ave                   58019              37.3
+ 2 DuSable Lake Shore Dr & Monroe St         28606              37.4
+ 3 Millennium Park                           25842              36.9
+ 4 Michigan Ave & Oak St                     25441              36.9
+ 5 DuSable Lake Shore Dr & North Blvd        25347              31.1
+ 6 Theater on the Lake                       18676              33.9
+ 7 Shedd Aquarium                            18201              29.8
+ 8 Wells St & Concord Ln                     14541              16.9
+ 9 Clark St & Armitage Ave                   13074              22.3
+10 Clark St & Lincoln Ave                    12887              23.2
+11 Dusable Harbor                            12858              35.3
+12 Indiana Ave & Roosevelt Rd                12047              30.8
+13 Montrose Harbor                           11543              36.8
+14 Wabash Ave & Grand Ave                    11464              27.9
+15 Clark St & Elm St                         11419              19.1
+16 Clark St & Newport St                     11221              17.1
+17 Broadway & Barry Ave                      10980              19.2
+18 Wells St & Elm St                         10967              15.1
+19 Sheffield Ave & Waveland Ave              10905              22.4
+20 Michigan Ave & Washington St              10870              30.9
+> 
+
+> head(member_start_station, 20)
+# A tibble: 20 × 3
+   start_station_name                 num_of_rides avg_duration_mins
+   <chr>                                     <int>             <dbl>
+ 1 Kingsbury St & Kinzie St                  23774              9.13
+ 2 Clark St & Elm St                         20980             11.8 
+ 3 Wells St & Concord Ln                     19925             11.6 
+ 4 Clinton St & Washington Blvd              19591             10.6 
+ 5 Loomis St & Lexington St                  18668              9.31
+ 6 University Ave & 57th St                  18662              7.79
+ 7 Ellis Ave & 60th St                       18516              6.72
+ 8 Clinton St & Madison St                   18276             10.2 
+ 9 Wells St & Elm St                         17891             10.6 
+10 Broadway & Barry Ave                      16379             12.4 
+11 Streeter Dr & Grand Ave                   16300             20.7 
+12 St. Clair St & Erie St                    15827             13.5 
+13 Dearborn St & Erie St                     15809             11.9 
+14 Canal St & Adams St                       15763             12.0 
+15 DuSable Lake Shore Dr & North Blvd        15592             18.1 
+16 Wells St & Huron St                       15370              9.78
+17 Wabash Ave & Grand Ave                    15086             13.3 
+18 Wells St & Hubbard St                     14926             10.6 
+19 Clark St & Wrightwood Ave                 14557             11.9 
+20 Wilton Ave & Belmont Ave                  14538             10.9 
+> 
+
+> head(member_end_station, 20)
+# A tibble: 20 × 3
+   end_station_name                   num_of_rides avg_duration_mins
+   <chr>                                     <int>             <dbl>
+ 1 Kingsbury St & Kinzie St                  23613              8.72
+ 2 Clark St & Elm St                         21322             11.2 
+ 3 Wells St & Concord Ln                     20539             11.3 
+ 4 Clinton St & Washington Blvd              20311              8.87
+ 5 University Ave & 57th St                  19412              7.31
+ 6 Clinton St & Madison St                   18829              9.46
+ 7 Loomis St & Lexington St                  18527              9.63
+ 8 Ellis Ave & 60th St                       18452              6.98
+ 9 Wells St & Elm St                         17831              9.92
+10 Broadway & Barry Ave                      16721             12.6 
+11 Dearborn St & Erie St                     15954             11.3 
+12 St. Clair St & Erie St                    15723             11.9 
+13 DuSable Lake Shore Dr & North Blvd        15325             20.1 
+14 Canal St & Adams St                       15210              9.96
+15 Wilton Ave & Belmont Ave                  14930             11.2 
+16 Streeter Dr & Grand Ave                   14782             21.7 
+17 Wells St & Hubbard St                     14768             10.0 
+18 Ellis Ave & 55th St                       14755              6.74
+19 Wells St & Huron St                       14752             10.0 
+20 Sheffield Ave & Fullerton Ave             14674              9.07
+```
 ```
 
 
